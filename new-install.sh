@@ -31,7 +31,7 @@ git clone https://github.com/Protectator/utils.git
 cd ~
 
 # Access
-curl https://github.com/Protectator.keys > ~/.ssh/authorized_keys
+curl https://github.com/Protectator.keys >> ~/.ssh/authorized_keys
 echo -e "$pswd\n$pswd" | passwd
 yes "y" | ssh-keygen -t rsa -b 4096 -C "me@protectator.ch" -N "$pswd"
 
