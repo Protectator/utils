@@ -12,16 +12,28 @@ fi
 # ----- Start of install -----
 
 # Ask for pass for user and SSH key
-read -s -p "Enter a pass for the user protectator and his generated SSH key :" pswd
+read -s -p "Enter a pass for the user protectator:" pswd
 
+#######
 # Users
 useradd protectator --home /home/protectator/ --create-home --groups sudo
 
-# Soft I commonly use
-curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.0/install.sh | bash
-apt-get install -y git
 
-# Setting home up
+##################
+# Install software
+
+# nvm
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.0/install.sh | bash
+# git
+apt-get install -y git
+# lazygit
+sudo add-apt-repository ppa:lazygit-team/release
+sudo apt-get update
+sudo apt-get install lazygit
+
+
+#############
+# Set home up
 su protectator
 cd ~
 mkdir -p /home/protectator/.ssh
@@ -30,15 +42,21 @@ cd projects
 git clone https://github.com/Protectator/utils.git
 cd ~
 
+
+########
 # Access
 curl https://github.com/Protectator.keys >> ~/.ssh/authorized_keys
 echo -e "$pswd\n$pswd" | passwd
-yes "y" | ssh-keygen -t rsa -b 4096 -C "me@protectator.ch" -N "$pswd"
+yes "y" | ssh-keygen -t rsa -b 4096 -C "me@protectator.ch"
 
-# node & npm install & packages
+
+####################
+# node & npm install
 nvm install --lts
 nvm use --lts
 npm install -g npx tldr
 
+
+#######################################
 # Erasing the password entered variable
 export pswd=
