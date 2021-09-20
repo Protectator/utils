@@ -22,14 +22,18 @@ useradd protectator --home /home/protectator/ --create-home --groups sudo
 ##################
 # Install software
 
+# Repositories I trust
+add-apt-repository ppa:git-core/ppa
+add-apt-repository ppa:lazygit-team/release
+
+apt-get update
+
 # nvm
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.0/install.sh | bash
 # git
 apt-get install -y git
 # lazygit
-sudo add-apt-repository ppa:lazygit-team/release
-sudo apt-get update
-sudo apt-get install lazygit
+apt-get install -y git lazygit
 
 
 #############
