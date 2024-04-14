@@ -30,6 +30,7 @@ curl https://getmic.ro | bash
 brew install chezmoi
 
 # Useful to dev
+brew install hyperfine
 
 # jq
 sudo apt-get install jq
