@@ -24,10 +24,13 @@ nvm install --lts
 nvm use --lts
 # - tldr
 nvm i -g tldr
+
 # micro
 curl https://getmic.ro | bash
 # chezmoi
 brew install chezmoi
+# keychain
+sudo apt install keychain
 
 # Useful to dev
 brew install hyperfine
