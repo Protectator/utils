@@ -18,22 +18,10 @@ sudo apt install git-all
 brew install jesseduffield/lazygit/lazygit
 # fzf
 brew install fzf
-# nvm
-curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
-nvm install --lts
-nvm use --lts
-# - tldr
-nvm i -g tldr
-
-# micro
-curl https://getmic.ro | bash
 # chezmoi
 brew install chezmoi
+# oh my zsh
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+
 # keychain
 sudo apt install keychain
-
-# Useful to dev
-brew install hyperfine
-
-# jq
-sudo apt-get install jq
