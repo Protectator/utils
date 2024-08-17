@@ -8,6 +8,20 @@ if [ "$(id -u)" = "0" ]; then
    exit 1
 fi
 
+# Getting some info from the user
+echo GitHub username ? (default: Protectator)
+read GITHUB_USERNAME
+
+echo e-mail address to use for SSH key and git ? (default: me@kewindousse.ch)
+read EMAIL
+
+echo Generating a private SSH key.
+ssh-keygen -t ed25519 -C $EMAIL
+
+echo You can add the public key to your trusted keys in Github : https://github.com/settings/ssh/new
+echo
+cat ~/.ssh/id_ed25519.pub
+
 # Needed pretty much everytime
 
 # homebrew
