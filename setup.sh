@@ -84,6 +84,48 @@ select yn in "Yes" "No"; do
     esac
 done
 
+install_common()
+{
+  sudo apt install -y wget curl make gnupg2 build-essentials jq netstat htop unzip
+}
+
+echo "OK to install the following ?"
+echo ""
+echo "◆ wget"
+echo "◆ curl"
+echo "◆ make"
+echo "◆ gnupg2"
+echo "◆ build-essentials"
+echo "◆ jq"
+echo "◆ netstat"
+echo "◆ htop"
+echo "◆ unzip"
+echo ""
+
+select yn in "Yes" "No"; do
+    case $yn in
+        Yes ) install_common; break;;
+        No ) ;;
+    esac
+done
+
+install_nvm()
+{
+  curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.0/install.sh | bash
+}
+
+echo "OK to install the following ?"
+echo ""
+echo "◆ nvm"
+echo ""
+
+select yn in "Yes" "No"; do
+    case $yn in
+        Yes ) install_nvm; break;;
+        No ) ;;
+    esac
+done
+
 init_chezmoi()
 {
   sh -c "$(curl -fsLS get.chezmoi.io)" -- init --apply $GITHUB_USERNAME
