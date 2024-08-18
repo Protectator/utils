@@ -1,4 +1,7 @@
 #!/bin/bash
+# To run this script, run :
+# /bin/bash -c "$(curl -fsSL https://kewin.dev/setup)"
+
 set -e
 
 # This assumes we're on a fresh new install of a Debian/Ubuntu distro
@@ -19,7 +22,7 @@ read GITHUB_USERNAME
 echo "e-mail address to use for SSH key and git ? (default: $EMAIL)"
 read EMAIL
 
-# ssh-keygen -t ed25519 -C \""$EMAIL"\"
+ssh-keygen -t ed25519 -C \""$EMAIL"\"
 
 echo "Updating apt..."
 sudo apt update
