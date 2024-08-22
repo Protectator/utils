@@ -17,10 +17,10 @@ EMAIL=me@kewindousse.ch
 
 # Getting some info from the user
 echo "GitHub username ? (default: $GITHUB_USERNAME)"
-read GITHUB_USERNAME
+read -r GITHUB_USERNAME
 
 echo "e-mail address to use for SSH key and git ? (default: $EMAIL)"
-read EMAIL
+read -r EMAIL
 
 ssh-keygen -t ed25519 -C \""$EMAIL"\"
 
@@ -70,7 +70,7 @@ install_zsh()
   # oh my zsh
   sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
   # powerlevel10k
-  git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
+  git clone --depth=1 https://github.com/romkatv/powerlevel10k.git "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}"/themes/powerlevel10k
 }
 
 echo "OK to install the following ?"
@@ -131,7 +131,7 @@ done
 
 init_chezmoi()
 {
-  sh -c "$(curl -fsLS get.chezmoi.io)" -- init --apply $GITHUB_USERNAME
+  sh -c "$(curl -fsLS get.chezmoi.io)" -- init --apply "$GITHUB_USERNAME"
 }
 
 echo "OK to apply your chezmoi settings from github $GITHUB_USERNAME ?"
