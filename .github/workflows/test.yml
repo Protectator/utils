@@ -1,0 +1,12 @@
+name: Shell Scripts Unit Testing
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Shellcheck the script
+        run: sudo apt-get install -y shellcheck && shellcheck setup.sh
