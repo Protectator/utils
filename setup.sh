@@ -24,6 +24,16 @@ read -r EMAIL
 
 ssh-keygen -t ed25519 -C \""$EMAIL"\"
 
+echo "Add the public key to your GitHub account : "
+echo ""
+echo "https://github.com/settings/ssh/new"
+
+cat ~/.ssh/id_ed25519.pub
+
+echo "Press any key to continue"
+# shellcheck disable=SC2162
+read -s -n 1
+
 echo "Updating apt..."
 sudo apt update
 
@@ -49,6 +59,7 @@ install_git_homebrew()
   # homebrew
   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
   # -> Source it
+  # shellcheck disable=SC2016
   (echo; echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"') >> /home/kewin/.bashrc
   eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
   # - lazygit
@@ -73,10 +84,10 @@ install_zsh()
   echo "Downloading MesloLGS NF fonts in ~/fonts"
   mkdir -p fonts
   cd ~/fonts
-  wget https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Regular.ttf
-  wget https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Bold.ttf
-  wget https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Italic.ttf
-  wget https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Bold%20Italic.ttf
+  wget -q https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Regular.ttf
+  wget -q https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Bold.ttf
+  wget -q https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Italic.ttf
+  wget -q https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Bold%20Italic.ttf
   cd ~
   # zsh
   sudo apt -y install zsh
@@ -102,7 +113,7 @@ done
 
 install_common()
 {
-  sudo apt -y install wget curl make gnupg2 build-essentials jq netstat htop unzip
+  sudo apt -y install wget curl make gnupg2 build-essential jq htop unzip
 }
 
 echo "OK to install the following ?"
@@ -111,9 +122,8 @@ echo "◆ wget"
 echo "◆ curl"
 echo "◆ make"
 echo "◆ gnupg2"
-echo "◆ build-essentials"
+echo "◆ build-essential"
 echo "◆ jq"
-echo "◆ netstat"
 echo "◆ htop"
 echo "◆ unzip"
 echo ""
@@ -144,7 +154,7 @@ done
 
 init_chezmoi()
 {
-  sh -c "$(curl -fsLS get.chezmoi.io)" -- init --apply "$GITHUB_USERNAME"
+  sh -c "$(curl -fsLS get.chezmoi.io)" -- init --ssh --apply "$GITHUB_USERNAME"
 }
 
 echo "OK to apply your chezmoi settings from github $GITHUB_USERNAME ?"
