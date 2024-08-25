@@ -24,6 +24,15 @@ read -r EMAIL
 
 ssh-keygen -t ed25519 -C \""$EMAIL"\"
 
+echo "Add the public key to your GitHub account : "
+echo ""
+echo "https://github.com/settings/ssh/new"
+
+cat ~/.ssh/id_ed25519.pub
+
+echo "Press any key to continue"
+read -s -n 1
+
 echo "Updating apt..."
 sudo apt update
 
