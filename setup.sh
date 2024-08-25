@@ -31,7 +31,7 @@ echo "https://github.com/settings/ssh/new"
 cat ~/.ssh/id_ed25519.pub
 
 echo "Press any key to continue"
-# shellcheck disable=SCSC2162
+# shellcheck disable=SC2162
 read -s -n 1
 
 echo "Updating apt..."
