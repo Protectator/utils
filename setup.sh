@@ -48,6 +48,9 @@ install_git_homebrew()
   sudo apt -y install git-all
   # homebrew
   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  # -> Source it
+  (echo; echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"') >> /home/kewin/.bashrc
+  eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
   # - lazygit
   brew install jesseduffield/lazygit/lazygit
   # fzf
