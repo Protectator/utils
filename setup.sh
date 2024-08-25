@@ -102,7 +102,7 @@ done
 
 install_common()
 {
-  sudo apt -y install wget curl make gnupg2 build-essentials jq netstat htop unzip
+  sudo apt -y install wget curl make gnupg2 build-essential jq htop unzip
 }
 
 echo "OK to install the following ?"
@@ -111,9 +111,8 @@ echo "◆ wget"
 echo "◆ curl"
 echo "◆ make"
 echo "◆ gnupg2"
-echo "◆ build-essentials"
+echo "◆ build-essential"
 echo "◆ jq"
-echo "◆ netstat"
 echo "◆ htop"
 echo "◆ unzip"
 echo ""
@@ -144,7 +143,7 @@ done
 
 init_chezmoi()
 {
-  sh -c "$(curl -fsLS get.chezmoi.io)" -- init --apply "$GITHUB_USERNAME"
+  sh -c "$(curl -fsLS get.chezmoi.io)" -- init --ssh --apply "$GITHUB_USERNAME"
 }
 
 echo "OK to apply your chezmoi settings from github $GITHUB_USERNAME ?"
