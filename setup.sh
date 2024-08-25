@@ -45,7 +45,7 @@ echo ""
 install_git_homebrew()
 {
   # git
-  sudo apt install git-all
+  sudo apt -y install git-all
   # homebrew
   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
   # - lazygit
@@ -76,7 +76,7 @@ install_zsh()
   wget https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Bold%20Italic.ttf
   cd ~
   # zsh
-  sudo apt install zsh
+  sudo apt -y install zsh
   # oh my zsh
   sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
   # powerlevel10k
@@ -99,7 +99,7 @@ done
 
 install_common()
 {
-  sudo apt install -y wget curl make gnupg2 build-essentials jq netstat htop unzip
+  sudo apt -y install wget curl make gnupg2 build-essentials jq netstat htop unzip
 }
 
 echo "OK to install the following ?"
