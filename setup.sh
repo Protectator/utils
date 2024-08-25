@@ -49,6 +49,7 @@ install_git_homebrew()
   # homebrew
   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
   # -> Source it
+  # shellcheck disable=SC2016
   (echo; echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"') >> /home/kewin/.bashrc
   eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
   # - lazygit
