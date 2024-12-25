@@ -47,7 +47,6 @@ echo "OK to install the following ?"
 echo ""
 echo "◆ git"
 echo "◆ homebrew"
-echo "┠─ gcc"
 echo "┠─ fzf"
 echo "┠─ lazygit"
 echo "┖─ chezmoi"
@@ -63,10 +62,6 @@ install_git_homebrew()
   # shellcheck disable=SC2016
   (echo; echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"') >> /home/kewin/.bashrc
   eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-  # - gcc
-  brew install gcc
-  # - lazygit
-  brew install jesseduffield/lazygit/lazygit
   # fzf
   brew install fzf
   # chezmoi
@@ -82,6 +77,11 @@ done
 
 install_zsh()
 {
+  # Install lazygit
+  LAZYGIT_VERSION=$(curl -s "https://api.github.com/repos/jesseduffield/lazygit/releases/latest" | \grep -Po '"tag_name": *"v\K[^"]*')
+  curl -Lo lazygit.tar.gz "https://github.com/jesseduffield/lazygit/releases/download/v${LAZYGIT_VERSION}/lazygit_${LAZYGIT_VERSION}_Linux_x86_64.tar.gz"
+  tar xf lazygit.tar.gz lazygit
+  sudo install lazygit -D -t /usr/local/bin/
   # Download fonts
   FONTS_PATH
   echo "Downloading MesloLGS NF fonts in ~/fonts"
@@ -102,6 +102,7 @@ install_zsh()
 
 echo "OK to install the following ?"
 echo ""
+echo "◆ lazygit"
 echo "◆ zsh"
 echo "◆ ohmyzsh"
 echo "┖─ powerlevel10k"
