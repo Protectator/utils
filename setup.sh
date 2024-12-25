@@ -48,7 +48,6 @@ echo ""
 echo "◆ git"
 echo "◆ homebrew"
 echo "┠─ fzf"
-echo "┠─ lazygit"
 echo "┖─ chezmoi"
 echo ""
 
