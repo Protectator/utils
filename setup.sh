@@ -47,6 +47,7 @@ echo "OK to install the following ?"
 echo ""
 echo "◆ git"
 echo "◆ homebrew"
+echo "┠─ gcc"
 echo "┠─ fzf"
 echo "┠─ lazygit"
 echo "┖─ chezmoi"
@@ -62,6 +63,8 @@ install_git_homebrew()
   # shellcheck disable=SC2016
   (echo; echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"') >> /home/kewin/.bashrc
   eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+  # - gcc
+  brew install gcc
   # - lazygit
   brew install jesseduffield/lazygit/lazygit
   # fzf
