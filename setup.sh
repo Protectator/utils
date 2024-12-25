@@ -154,6 +154,22 @@ select yn in "Yes" "No"; do
     esac
 done
 
+init_tmux_plugins()
+{
+  git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+}
+
+echo "OK to install tmux plugins ?"
+echo ""
+echo "◆ npm"
+select yn in "Yes" "No"; do
+    case $yn in
+        Yes ) init_tmux_plugins; break;;
+        No ) break;;
+    esac
+done
+
+
 init_chezmoi()
 {
   sh -c "$(curl -fsLS get.chezmoi.io)" -- init --ssh --apply "$GITHUB_USERNAME"
