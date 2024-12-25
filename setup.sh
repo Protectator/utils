@@ -83,7 +83,6 @@ install_zsh()
   tar xf lazygit.tar.gz lazygit
   sudo install lazygit -D -t /usr/local/bin/
   # Download fonts
-  FONTS_PATH
   echo "Downloading MesloLGS NF fonts in ~/fonts"
   mkdir -p fonts
   cd ~/fonts
