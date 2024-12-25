@@ -70,7 +70,7 @@ install_git_homebrew()
 select yn in "Yes" "No"; do
     case $yn in
         Yes ) install_git_homebrew; break;;
-        No ) ;;
+        No ) break;;
     esac
 done
 
@@ -109,7 +109,7 @@ echo ""
 select yn in "Yes" "No"; do
     case $yn in
         Yes ) install_zsh; break;;
-        No ) ;;
+        No ) break;;
     esac
 done
 
@@ -133,7 +133,7 @@ echo ""
 select yn in "Yes" "No"; do
     case $yn in
         Yes ) install_common; break;;
-        No ) ;;
+        No ) break;;
     esac
 done
 
@@ -150,7 +150,7 @@ echo ""
 select yn in "Yes" "No"; do
     case $yn in
         Yes ) install_nvm; break;;
-        No ) ;;
+        No ) break;;
     esac
 done
 
@@ -164,6 +164,6 @@ echo ""
 select yn in "Yes" "No"; do
     case $yn in
         Yes ) init_chezmoi; break;;
-        No ) ;;
+        No ) break;;
     esac
 done
