@@ -22,6 +22,24 @@ read -r GITHUB_USERNAME
 echo "e-mail address to use for SSH key and git ? (default: $EMAIL)"
 read -r EMAIL
 
+echo "OK to install the following ?"
+echo ""
+echo "◆ openssh-client"
+echo ""
+
+install_openssh()
+{
+  # openssh-client
+  sudo apt install openssh-client
+}
+
+select yn in "Yes" "No"; do
+    case $yn in
+        Yes ) install_openssh; break;;
+        No ) break;;
+    esac
+done
+
 ssh-keygen -t ed25519 -C \""$EMAIL"\"
 
 echo "Add the public key to your GitHub account : "
