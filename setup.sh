@@ -30,7 +30,7 @@ echo ""
 install_openssh()
 {
   # openssh-client
-  sudo apt install openssh-client
+  sudo apt install -y openssh-client
 }
 
 select yn in "Yes" "No"; do
