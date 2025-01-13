@@ -12,6 +12,28 @@ if [ "$(id -u)" = "0" ]; then
    exit 1
 fi
 
+install_most_common()
+{
+  sudo apt -y install wget curl make htop unzip vim
+}
+
+echo "OK to install the following ?"
+echo ""
+echo "◆ wget"
+echo "◆ curl"
+echo "◆ make"
+echo "◆ htop"
+echo "◆ unzip"
+echo "◆ vim"
+echo ""
+
+select yn in "Yes" "No"; do
+    case $yn in
+        Yes ) install_most_common; break;;
+        No ) break;;
+    esac
+done
+
 GITHUB_USERNAME=Protectator
 EMAIL=me@kewindousse.ch
 
@@ -133,19 +155,14 @@ done
 
 install_common()
 {
-  sudo apt -y install wget curl make gnupg2 build-essential jq htop unzip
+  sudo apt -y install gnupg2 build-essential jq
 }
 
 echo "OK to install the following ?"
 echo ""
-echo "◆ wget"
-echo "◆ curl"
-echo "◆ make"
 echo "◆ gnupg2"
 echo "◆ build-essential"
 echo "◆ jq"
-echo "◆ htop"
-echo "◆ unzip"
 echo ""
 
 select yn in "Yes" "No"; do
