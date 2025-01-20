@@ -14,7 +14,7 @@ fi
 
 install_most_common()
 {
-  sudo apt -y install wget curl make htop unzip vim
+  sudo apt -y install wget curl make htop unzip vim tmux
 }
 
 echo "OK to install the following ?"
@@ -25,6 +25,7 @@ echo "◆ make"
 echo "◆ htop"
 echo "◆ unzip"
 echo "◆ vim"
+echo "◆ tmux"
 echo ""
 
 select yn in "Yes" "No"; do
