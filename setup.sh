@@ -173,19 +173,19 @@ select yn in "Yes" "No"; do
     esac
 done
 
-install_nvm()
+install_mise()
 {
-  curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.0/install.sh | bash
+  brew install mise
 }
 
 echo "OK to install the following ?"
 echo ""
-echo "◆ nvm"
+echo "◆ mise (from brew)"
 echo ""
 
 select yn in "Yes" "No"; do
     case $yn in
-        Yes ) install_nvm; break;;
+        Yes ) install_mise; break;;
         No ) break;;
     esac
 done
@@ -197,7 +197,7 @@ init_tmux_plugins()
 
 echo "OK to install tmux plugins ?"
 echo ""
-echo "◆ npm"
+echo "◆ tmux-plugins/tpm"
 select yn in "Yes" "No"; do
     case $yn in
         Yes ) init_tmux_plugins; break;;
