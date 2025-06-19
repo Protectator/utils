@@ -63,26 +63,33 @@ select yn in "Yes" "No"; do
     esac
 done
 
-ssh-keygen -t ed25519 -C \""$EMAIL"\"
-
-echo "Add the public key to your GitHub account : "
+echo "Generate SSH key ?"
 echo ""
-echo "https://github.com/settings/ssh/new"
 
-cat ~/.ssh/id_ed25519.pub
+generate_key()
+{
+   ssh-keygen -t ed25519 -C \""$EMAIL"\"
+   
+   echo "Add the public key to your GitHub account : "
+   echo ""
+   echo "https://github.com/settings/ssh/new"
+   
+   cat ~/.ssh/id_ed25519.pub
+   
+   echo "Press any key to continue"
+   # shellcheck disable=SC2162
+   read -s -n 1
+}
 
-echo "Press any key to continue"
-# shellcheck disable=SC2162
-read -s -n 1
+select yn in "Yes" "No"; do
+    case $yn in
+        Yes ) generate_key; break;;
+        No ) break;;
+    esac
+done
 
 echo "Updating apt..."
 sudo apt update
-
-echo "You can add the public key to your trusted keys in Github : https://github.com/settings/ssh/new"
-echo "Here it is : "
-echo ""
-cat ~/.ssh/id_ed25519.pub
-echo ""
 
 echo "OK to install the following ?"
 echo ""
