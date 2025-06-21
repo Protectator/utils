@@ -14,7 +14,7 @@ fi
 
 install_most_common()
 {
-  sudo apt -y install wget curl make htop unzip vim tmux
+  sudo apt -y install wget curl make htop unzip vim ssh-import-id tmux
 }
 
 echo "OK to install the following ?"
@@ -25,6 +25,7 @@ echo "◆ make"
 echo "◆ htop"
 echo "◆ unzip"
 echo "◆ vim"
+echo "◆ ssh-import-id"
 echo "◆ tmux"
 echo ""
 
@@ -44,6 +45,20 @@ read -r GITHUB_USERNAME
 
 echo "e-mail address to use for SSH key and git ? (default: $EMAIL)"
 read -r EMAIL
+
+echo "OK to import GitHub keys of $GITHUB_USERNAME ?"
+
+import_gh_keys()
+{
+  ssh-import-id-gh $GITHUB_USERNAME
+}
+
+select yn in "Yes" "No"; do
+    case $yn in
+        Yes ) import_gh_keys; break;;
+        No ) break;;
+    esac
+done
 
 echo "OK to install the following ?"
 echo ""
