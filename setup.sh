@@ -50,7 +50,7 @@ echo "OK to import GitHub keys of $GITHUB_USERNAME ?"
 
 import_gh_keys()
 {
-  ssh-import-id-gh $GITHUB_USERNAME
+  ssh-import-id-gh:"$GITHUB_USERNAME"
 }
 
 select yn in "Yes" "No"; do
