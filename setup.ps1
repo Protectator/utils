@@ -17,5 +17,8 @@ winget install Spotify.Spotify
 Write-Host "Installing Git..."
 winget install Git.Git
 
+Write-Host "Installing Winaero Tweaker..."
+winget install -e --id winaero.tweaker
+
 Write-Host "Done"
 pause
