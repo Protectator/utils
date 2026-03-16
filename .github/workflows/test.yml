@@ -1,12 +1,29 @@
 name: Shell Scripts Unit Testing
 
-on: [push]
+on: [push, pull_request]
 
 jobs:
-  build:
+  shellcheck:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
-      - name: Shellcheck the script
-        run: sudo apt-get install -y shellcheck && shellcheck setup.sh
+        uses: actions/checkout@v4
+      - name: Syntax check
+        run: bash -n setup.sh
+      - name: Shellcheck
+        run: shellcheck setup.sh
+
+  psscriptanalyzer:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Lint PowerShell script
+        shell: pwsh
+        run: |
+          Install-Module -Name PSScriptAnalyzer -Force -Scope CurrentUser
+          $results = Invoke-ScriptAnalyzer -Path setup.ps1 -Severity Error,Warning
+          if ($results) {
+            $results | Format-Table -AutoSize
+            exit 1
+          }

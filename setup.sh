@@ -29,6 +29,8 @@ echo "◆ ssh-import-id"
 echo "◆ tmux"
 echo ""
 
+sudo apt update
+
 select yn in "Yes" "No"; do
     case $yn in
         Yes ) install_most_common; break;;
@@ -41,16 +43,18 @@ EMAIL=me@kewindousse.ch
 
 # Getting some info from the user
 echo "GitHub username ? (default: $GITHUB_USERNAME)"
-read -r GITHUB_USERNAME
+read -r input
+GITHUB_USERNAME=${input:-$GITHUB_USERNAME}
 
 echo "e-mail address to use for SSH key and git ? (default: $EMAIL)"
-read -r EMAIL
+read -r input
+EMAIL=${input:-$EMAIL}
 
 echo "OK to import GitHub keys of $GITHUB_USERNAME ?"
 
 import_gh_keys()
 {
-  ssh-import-id-gh:"$GITHUB_USERNAME"
+  ssh-import-id-gh "$GITHUB_USERNAME"
 }
 
 select yn in "Yes" "No"; do
@@ -83,7 +87,7 @@ echo ""
 
 generate_key()
 {
-   ssh-keygen -t ed25519 -C \""$EMAIL"\"
+   ssh-keygen -t ed25519 -C "$EMAIL"
    
    echo "Add the public key to your GitHub account : "
    echo ""
@@ -103,9 +107,6 @@ select yn in "Yes" "No"; do
     esac
 done
 
-echo "Updating apt..."
-sudo apt update
-
 echo "OK to install the following ?"
 echo ""
 echo "◆ git"
@@ -122,7 +123,7 @@ install_git_homebrew()
   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
   # -> Source it
   # shellcheck disable=SC2016
-  (echo; echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"') >> /home/kewin/.bashrc
+  (echo; echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"') >> "$HOME/.bashrc"
   eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
   # fzf
   brew install fzf
@@ -144,19 +145,21 @@ install_zsh()
   curl -Lo lazygit.tar.gz "https://github.com/jesseduffield/lazygit/releases/download/v${LAZYGIT_VERSION}/lazygit_${LAZYGIT_VERSION}_Linux_x86_64.tar.gz"
   tar xf lazygit.tar.gz lazygit
   sudo install lazygit -D -t /usr/local/bin/
+  rm -f lazygit.tar.gz lazygit
   # Download fonts
   echo "Downloading MesloLGS NF fonts in ~/fonts"
-  mkdir -p fonts
-  cd ~/fonts
-  wget -q https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Regular.ttf
-  wget -q https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Bold.ttf
-  wget -q https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Italic.ttf
-  wget -q https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Bold%20Italic.ttf
-  cd ~
+  (
+    mkdir -p ~/fonts
+    cd ~/fonts
+    wget -q https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Regular.ttf
+    wget -q https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Bold.ttf
+    wget -q https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Italic.ttf
+    wget -q https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Bold%20Italic.ttf
+  )
   # zsh
   sudo apt -y install zsh
   # oh my zsh
-  sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+  RUNZSH=no sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
   # powerlevel10k
   git clone --depth=1 https://github.com/romkatv/powerlevel10k.git "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}"/themes/powerlevel10k
 }
@@ -230,7 +233,7 @@ done
 
 init_chezmoi()
 {
-  sh -c "$(curl -fsLS get.chezmoi.io)" -- init --ssh --apply "$GITHUB_USERNAME"
+  chezmoi init --ssh --apply "$GITHUB_USERNAME"
 }
 
 echo "OK to apply your chezmoi settings from github $GITHUB_USERNAME ?"
