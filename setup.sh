@@ -54,7 +54,12 @@ echo "OK to import GitHub keys of $GITHUB_USERNAME ?"
 
 import_gh_keys()
 {
-  ssh-import-id-gh "$GITHUB_USERNAME"
+  if command -v ssh-import-id-gh &>/dev/null; then
+    ssh-import-id-gh "$GITHUB_USERNAME"
+  else
+    mkdir -p ~/.ssh
+    curl -fsSL "https://github.com/$GITHUB_USERNAME.keys" >> ~/.ssh/authorized_keys
+  fi
 }
 
 select yn in "Yes" "No"; do
@@ -142,26 +147,21 @@ install_zsh()
 {
   # Install lazygit
   LAZYGIT_VERSION=$(curl -s "https://api.github.com/repos/jesseduffield/lazygit/releases/latest" | \grep -Po '"tag_name": *"v\K[^"]*')
-  curl -Lo lazygit.tar.gz "https://github.com/jesseduffield/lazygit/releases/download/v${LAZYGIT_VERSION}/lazygit_${LAZYGIT_VERSION}_Linux_x86_64.tar.gz"
+  LAZYGIT_ARCH=$(uname -m | sed 's/x86_64/x86_64/;s/aarch64/arm64/;s/armv7l/armv7/')
+  curl -Lo lazygit.tar.gz "https://github.com/jesseduffield/lazygit/releases/download/v${LAZYGIT_VERSION}/lazygit_${LAZYGIT_VERSION}_Linux_${LAZYGIT_ARCH}.tar.gz"
   tar xf lazygit.tar.gz lazygit
   sudo install lazygit -D -t /usr/local/bin/
   rm -f lazygit.tar.gz lazygit
-  # Download fonts
-  echo "Downloading MesloLGS NF fonts in ~/fonts"
-  (
-    mkdir -p ~/fonts
-    cd ~/fonts
-    wget -q https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Regular.ttf
-    wget -q https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Bold.ttf
-    wget -q https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Italic.ttf
-    wget -q https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Bold%20Italic.ttf
-  )
   # zsh
   sudo apt -y install zsh
   # oh my zsh
   RUNZSH=no sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
   # powerlevel10k
-  git clone --depth=1 https://github.com/romkatv/powerlevel10k.git "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}"/themes/powerlevel10k
+  if ! command -v git &>/dev/null; then
+    echo "Skipping powerlevel10k: git is not installed"
+  else
+    git clone --depth=1 https://github.com/romkatv/powerlevel10k.git "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}"/themes/powerlevel10k
+  fi
 }
 
 echo "OK to install the following ?"
@@ -200,6 +200,10 @@ done
 
 install_mise()
 {
+  if ! command -v brew &>/dev/null; then
+    echo "Skipping mise: brew is not installed"
+    return
+  fi
   brew install mise
 }
 
@@ -233,6 +237,10 @@ done
 
 init_chezmoi()
 {
+  if ! command -v chezmoi &>/dev/null; then
+    echo "Skipping chezmoi: chezmoi is not installed"
+    return
+  fi
   chezmoi init --ssh --apply "$GITHUB_USERNAME"
 }
 
@@ -241,6 +249,43 @@ echo ""
 select yn in "Yes" "No"; do
     case $yn in
         Yes ) init_chezmoi; break;;
+        No ) break;;
+    esac
+done
+
+install_fonts()
+{
+  # Fetch the latest Nerd Fonts release version
+  NF_VERSION=$(curl -s "https://api.github.com/repos/ryanoasis/nerd-fonts/releases/latest" | \grep -Po '"tag_name": *"v\K[^"]*')
+  # Download the JetBrainsMono zip and extract only the NL Mono variants
+  TMP_DIR=$(mktemp -d)
+  curl -fsSLo "$TMP_DIR/JetBrainsMono.zip" "https://github.com/ryanoasis/nerd-fonts/releases/download/v${NF_VERSION}/JetBrainsMono.zip"
+  unzip -q -o "$TMP_DIR/JetBrainsMono.zip" 'JetBrainsMonoNLNerdFontMono-*.ttf' -d "$TMP_DIR"
+  rm "$TMP_DIR/JetBrainsMono.zip"
+
+  if grep -qi microsoft /proc/version 2>/dev/null; then
+    # Running in WSL: install into the Windows per-user font directory
+    # so the fonts are available to Windows terminals (e.g. Windows Terminal)
+    WIN_USER=$(cmd.exe /c "echo %USERNAME%" 2>/dev/null | tr -d '\r')
+    FONT_DIR="/mnt/c/Users/${WIN_USER}/AppData/Local/Microsoft/Windows/Fonts"
+  else
+    FONT_DIR="$HOME/.local/share/fonts"
+  fi
+  mkdir -p "$FONT_DIR"
+  cp "$TMP_DIR"/JetBrainsMonoNLNerdFontMono-*.ttf "$FONT_DIR/"
+  rm -rf "$TMP_DIR"
+  if ! grep -qi microsoft /proc/version 2>/dev/null; then
+    # Rebuild the Linux font cache so the new fonts are immediately usable
+    fc-cache -f
+  fi
+  echo "Fonts installed to $FONT_DIR"
+}
+
+echo "OK to install JetBrainsMonoNL Nerd Font Mono fonts ?"
+echo ""
+select yn in "Yes" "No"; do
+    case $yn in
+        Yes ) install_fonts; break;;
         No ) break;;
     esac
 done
