@@ -123,12 +123,13 @@ echo ""
 install_git_homebrew()
 {
   # git
-  sudo apt -y install git-all
+  sudo apt -y install git
   # homebrew
   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-  # -> Source it
+  # -> Source it (only append to .bashrc if not already present)
   # shellcheck disable=SC2016
-  (echo; echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"') >> "$HOME/.bashrc"
+  grep -qF 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' "$HOME/.bashrc" \
+    || (echo; echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"') >> "$HOME/.bashrc"
   eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
   # fzf
   brew install fzf
@@ -147,7 +148,7 @@ install_zsh()
 {
   # Install lazygit
   LAZYGIT_VERSION=$(curl -s "https://api.github.com/repos/jesseduffield/lazygit/releases/latest" | \grep -Po '"tag_name": *"v\K[^"]*')
-  LAZYGIT_ARCH=$(uname -m | sed 's/x86_64/x86_64/;s/aarch64/arm64/;s/armv7l/armv7/')
+  LAZYGIT_ARCH=$(uname -m | sed 's/aarch64/arm64/;s/armv7l/armv7/')
   curl -Lo lazygit.tar.gz "https://github.com/jesseduffield/lazygit/releases/download/v${LAZYGIT_VERSION}/lazygit_${LAZYGIT_VERSION}_Linux_${LAZYGIT_ARCH}.tar.gz"
   tar xf lazygit.tar.gz lazygit
   sudo install lazygit -D -t /usr/local/bin/
@@ -221,12 +222,17 @@ done
 
 init_tmux_plugins()
 {
+  if ! command -v git &>/dev/null; then
+    echo "Skipping tmux plugins: git is not installed"
+    return
+  fi
   git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 }
 
 echo "OK to install tmux plugins ?"
 echo ""
 echo "◆ tmux-plugins/tpm"
+echo ""
 select yn in "Yes" "No"; do
     case $yn in
         Yes ) init_tmux_plugins; break;;
@@ -289,3 +295,6 @@ select yn in "Yes" "No"; do
         No ) break;;
     esac
 done
+
+echo ""
+echo "Done! Restart your shell to apply all changes."
