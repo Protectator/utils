@@ -132,6 +132,7 @@ install_git_homebrew()
   # shellcheck disable=SC2016
   grep -qF 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' "$HOME/.bashrc" \
     || (echo; echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"') >> "$HOME/.bashrc"
+  # shellcheck disable=SC2016
   grep -qF 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' "$HOME/.zshrc" \
     || (echo; echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"') >> "$HOME/.zshrc"
   eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
