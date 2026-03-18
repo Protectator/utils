@@ -126,10 +126,12 @@ install_git_homebrew()
   sudo apt -y install git
   # homebrew
   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-  # -> Source it (only append to .bashrc if not already present)
+  # -> Source it (only append to .bashrc and .zshrc if not already present)
   # shellcheck disable=SC2016
   grep -qF 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' "$HOME/.bashrc" \
     || (echo; echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"') >> "$HOME/.bashrc"
+  grep -qF 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' "$HOME/.zshrc" \
+    || (echo; echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"') >> "$HOME/.zshrc"
   eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
   # fzf
   brew install fzf
