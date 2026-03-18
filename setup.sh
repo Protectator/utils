@@ -304,5 +304,35 @@ select yn in "Yes" "No"; do
     esac
 done
 
+configure_wsl()
+{
+  if ! grep -qi microsoft /proc/version 2>/dev/null; then
+    echo "Skipping WSL config: not running in WSL"
+    return
+  fi
+  local username
+  username=$(whoami)
+  sudo tee /etc/wsl.conf > /dev/null <<EOF
+[boot]
+systemd=true
+
+[user]
+default=${username}
+EOF
+  echo "WSL configured. Run 'wsl --shutdown' from PowerShell then reopen the terminal."
+}
+
+echo "OK to configure WSL ? (sets default user, enables systemd)"
+echo ""
+echo "◆ /etc/wsl.conf"
+echo ""
+
+select yn in "Yes" "No"; do
+    case $yn in
+        Yes ) configure_wsl; break;;
+        No ) break;;
+    esac
+done
+
 echo ""
 echo "Done! Restart your shell to apply all changes."
