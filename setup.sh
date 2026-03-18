@@ -117,7 +117,9 @@ echo ""
 echo "◆ git"
 echo "◆ homebrew"
 echo "┠─ fzf"
-echo "┖─ chezmoi"
+echo "┠─ chezmoi"
+echo "┠─ zoxide"
+echo "┖─ yazi"
 echo ""
 
 install_git_homebrew()
@@ -137,6 +139,10 @@ install_git_homebrew()
   brew install fzf
   # chezmoi
   brew install chezmoi
+  # zoxide - smarter cd command
+  brew install zoxide
+  # yazi - terminal file manager
+  brew install yazi
 }
 
 select yn in "Yes" "No"; do
