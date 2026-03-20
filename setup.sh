@@ -31,6 +31,10 @@ echo ""
 
 sudo apt update
 
+# Set locale to en_US.UTF-8
+sudo apt install -y locales
+sudo update-locale LANG=en_US.UTF-8 LC_ALL=en_US.UTF-8
+
 select yn in "Yes" "No"; do
     case $yn in
         Yes ) install_most_common; break;;
@@ -208,6 +212,40 @@ select yn in "Yes" "No"; do
     esac
 done
 
+install_docker()
+{
+  local distro
+  distro=$(. /etc/os-release && echo "${ID}")
+  sudo apt install -y ca-certificates curl
+  sudo install -m 0755 -d /etc/apt/keyrings
+  sudo curl -fsSL "https://download.docker.com/linux/${distro}/gpg" -o /etc/apt/keyrings/docker.asc
+  sudo chmod a+r /etc/apt/keyrings/docker.asc
+  sudo tee /etc/apt/sources.list.d/docker.sources > /dev/null <<EOF
+Types: deb
+URIs: https://download.docker.com/linux/${distro}
+Suites: $(. /etc/os-release && echo "$VERSION_CODENAME")
+Components: stable
+Signed-By: /etc/apt/keyrings/docker.asc
+EOF
+  sudo apt update
+  sudo apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+  sudo usermod -aG docker "$USER"
+  echo "Docker installed. Log out and back in (or run 'newgrp docker') for group membership to take effect."
+}
+
+echo "OK to install the following ?"
+echo ""
+echo "◆ docker-ce"
+echo "┖─ usermod -aG docker \$USER"
+echo ""
+
+select yn in "Yes" "No"; do
+    case $yn in
+        Yes ) install_docker; break;;
+        No ) break;;
+    esac
+done
+
 install_mise()
 {
   if ! command -v brew &>/dev/null; then
@@ -301,6 +339,22 @@ echo ""
 select yn in "Yes" "No"; do
     case $yn in
         Yes ) install_fonts; break;;
+        No ) break;;
+    esac
+done
+
+configure_linger()
+{
+  sudo loginctl enable-linger "$USER"
+}
+
+echo "OK to enable systemd linger for $USER ?"
+echo "(keeps user services running after logout)"
+echo ""
+
+select yn in "Yes" "No"; do
+    case $yn in
+        Yes ) configure_linger; break;;
         No ) break;;
     esac
 done
